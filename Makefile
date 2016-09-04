@@ -10,14 +10,17 @@ SRC_FOLDER = src
 
 OUTPUT_FILE = programa
 
-all: make_dir build_object compile copy_libs
+all: make_dir build_bitcode build_object compile copy_libs
 
 make_dir:
 	mkdir -p $(OBJ_FOLDER)
 	mkdir -p $(BIN_FOLDER)
 
+build_bitcode:
+	java -jar tools/portugol-compiler-llvm.jar src/programa.por -o src/programa.bc
+
 build_object:
-	llc $(SRC_FOLDER)/*.ll -filetype=obj -o $(OBJ_FOLDER)/$(OUTPUT_FILE).o
+	llc $(SRC_FOLDER)/*.bc -filetype=obj -o $(OBJ_FOLDER)/$(OUTPUT_FILE).o
 
 copy_libs:
 	cp $(LIB_FOLDER)/*.dll $(BIN_FOLDER)/
